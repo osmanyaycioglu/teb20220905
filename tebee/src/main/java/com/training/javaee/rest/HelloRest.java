@@ -1,5 +1,6 @@
 package com.training.javaee.rest;
 
+import javax.ejb.EJB;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.PATCH;
@@ -9,15 +10,27 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import com.training.javaee.ejb.MySingletonEjb;
+import com.training.javaee.ejb.MyStatelessEjb;
+
 
 @Path("/hello")
 @Produces(MediaType.TEXT_PLAIN)
 public class HelloRest {
 
+    @EJB
+    //@Inject
+    private MyStatelessEjb msejb;
+
+    @EJB
+    private MySingletonEjb mSingletonEjb;
+
     @Path("/hello1")
     @GET
     public String hello() {
-        return "Hello from rest application";
+        String helloLoc = this.msejb.hello();
+        String goodbyeLoc = this.msejb.goodbye();
+        return helloLoc + " " + goodbyeLoc;
     }
 
     @Path("/hello1")
